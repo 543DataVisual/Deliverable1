@@ -1,0 +1,43 @@
+---
+title: "Deliverable 2"
+date: 1/25/23
+output: html_notebook
+---
+
+
+importing packages
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(ggthemes)
+```
+
+loading data 
+```{r}
+location='https://github.com/reederan/543-1/raw/main/'
+file='copy_tractassignments.csv'
+link=paste0(location,file)
+
+mydata=read.csv(link)
+
+
+```
+
+creating visual
+```{r}
+small2 <- mydata %>%
+  select(tract, community_center, total_non_english)
+
+small2
+cclangtable=table(small2$community_center, small2$total_non_english)
+cclangtable
+
+mydata
+
+
+```
+
+```{r}
+aggregate(data=mydata,cbind(per_cap_income,total_non_english)~community_center,mean)
+```
+

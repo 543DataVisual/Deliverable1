@@ -1,0 +1,73 @@
+---
+title: "Deliverable 1"
+date: 1/11/23
+output: html_notebook
+---
+
+importing packages
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(ggthemes)
+```
+
+loading data 
+```{r}
+location='https://github.com/reederan/543-1/raw/main/'
+file='copy_tractassignments.csv'
+link=paste0(location,file)
+
+mydata=read.csv(link)
+
+head(mydata)
+
+small <- mydata %>%
+  select(tract, total_non_english, community_center)
+
+head(small)
+
+
+```
+
+subsetting data for visualizing
+```{r}
+install.packages("moments")
+library(moments)
+
+
+mn =mean(small$total_non_english,na.rm = T)
+
+
+
+install.packages("moments")
+library(moments)
+
+annMean = paste0('Mean:',round(mn))
+annsd = paste0('Skewness:', round(sk, 2))
+gginfo <- small %>% ggplot(aes(x = total_non_english)) +
+  geom_histogram(fill = "#a3b18a", color = "white") + 
+  geom_vline(aes(xintercept=mean(total_non_english))) +
+  annotate(geom = 'text',color='red',
+             label=annMean,
+              y = 4,
+              x= mn+100,
+              angle=90) 
+
+
+
+labels <- labs(x = "Non-English Speakers", y = "Tract", title = "Total Non-English Speakers", 
+               subtitle = "in Each Tract in The City of Bellevue, Washington USA")
+
+graph <- 
+  gginfo +##help 
+  labels + 
+  theme_few()
+graph
+
+
+mean(small$total_non_english)
+[1] 1762.882
+
+
+```
+
