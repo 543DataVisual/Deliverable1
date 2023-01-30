@@ -14,30 +14,20 @@ library(ggthemes)
 
 loading data 
 ```{r}
-location='https://github.com/reederan/543-1/raw/main/'
-file='copy_tractassignments.csv'
+location='https://github.com/543DataVisual/Deliverable1/raw/main/'
+file='cleanedtractsfile3.csv'
 link=paste0(location,file)
 
 mydata=read.csv(link)
 
-
-```
-
-creating visual
-```{r}
-small2 <- mydata %>%
-  select(tract, community_center, total_non_english)
-
-small2
-cclangtable=table(small2$community_center, small2$total_non_english)
-cclangtable
-
 mydata
 
-
 ```
 
+
+Aggregating data 
 ```{r}
 aggregate(data=mydata,cbind(per_cap_income,total_non_english)~community_center,mean)
 ```
+
 
