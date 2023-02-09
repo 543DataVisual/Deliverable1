@@ -1,0 +1,72 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+```{r}
+View(airbnb_clean)
+```
+
+```{r}
+(airbnb_locrating=table(airbnb_clean$rating,airbnb_clean$address))
+ library(magrittr)
+```
+```{r}
+(locrating_col=prop.table(airbnb_locrating, margin = 2) %>% round(.,3))
+(cityratingDF = as.data.frame(airbnb_locrating))
+as.data.frame(locrating_col)
+cityratingDF$share = as.data.frame(locrating_col)[,3]
+cityratingDF
+
+```
+```{r}
+names(cityratingDF)[1:3] = c("rating","location","counts")
+cityratingDF
+
+```
+```{r}
+library(ggplot2)
+basel = ggplot(data=cityratingDF,
+aes(x=location, y=share, fill=rating))
+barstacked = basel + geom_bar(stat = 'identity', position = 'stack')
+barstacked
+
+```
+```{r}
+library(tidyverse)
+```
+```{r}
+library(scales)
+```
+
+```{r}
+barstackedpct = barstacked + geom_text(size = 5,
+                                       position = position_stack(vjust = 0.5),
+                                       aes(label = percent (share,accuracy = 0.1)))
+barstackedpct = barstackedpct + scale_y_continuous(labels = percent)
+barstackedpct
+```
+```{r}
+basel = ggplot(data=cityratingDF,
+aes(x=location, y=share, fill=reorder(rating,share)))
+barstacked = basel + geom_bar(stat = 'identity', position = 'stack')
+barstacked = barstacked + geom_text(size = 2,
+                                       position = position_stack(vjust = 0.5),
+                                       aes(label = percent (share,accuracy = 0.1)))
+barstacked = barstacked + scale_y_continuous(labels = percent)
+barstacked
+```
